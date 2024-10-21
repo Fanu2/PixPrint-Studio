@@ -10,6 +10,7 @@ export default function Home() {
     const [overlayImage, setOverlayImage] = useState(null); // Overlay image
     const [overlayDimensions, setOverlayDimensions] = useState({ width: 100, height: 100 }); // Default dimensions for overlay
     const [textSize, setTextSize] = useState(36); // Default text size
+    const [fontColor, setFontColor] = useState('#FFFFFF'); // Default font color (white)
     const overlayRef = useRef(null);
     const textRef = useRef(null);
 
@@ -102,6 +103,14 @@ export default function Home() {
                         max={100}
                     />
                 </label>
+                <label>
+                    Font Color:
+                    <input
+                        type="color"
+                        value={fontColor}
+                        onChange={(e) => setFontColor(e.target.value)}
+                    />
+                </label>
             </div>
 
             <div id="pdf-content" style={{ position: 'relative', width: '595px', height: '842px', marginTop: '20px', border: '1px solid #ccc' }}>
@@ -158,7 +167,7 @@ export default function Home() {
                             bottom: '20px',
                             left: '50%',
                             transform: 'translateX(-50%)',
-                            color: 'white',
+                            color: fontColor, // Apply the selected font color
                             fontSize: `${textSize}px`,
                             textAlign: 'center',
                             textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)',
