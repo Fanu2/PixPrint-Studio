@@ -10,6 +10,7 @@ export default function Home() {
     const [overlayImage, setOverlayImage] = useState(null); // Overlay image
     const [overlayDimensions, setOverlayDimensions] = useState({ width: 100, height: 100 }); // Default dimensions for overlay
     const [textSize, setTextSize] = useState(36); // Default text size
+    const [textColor, setTextColor] = useState('#FFFFFF'); // Default text color (white)
     const [isResizing, setIsResizing] = useState(false); // State to manage resizing
     const overlayRef = useRef(null);
     const textRef = useRef(null);
@@ -106,6 +107,14 @@ export default function Home() {
                         max={100}
                     />
                 </label>
+                <label>
+                    Text Color:
+                    <input
+                        type="color"
+                        value={textColor}
+                        onChange={(e) => setTextColor(e.target.value)} // Update the state with selected color
+                    />
+                </label>
             </div>
 
             <div id="pdf-content" style={{ position: 'relative', width: '595px', height: '842px', marginTop: '20px', border: '1px solid #ccc' }}>
@@ -115,7 +124,6 @@ export default function Home() {
                         alt="Background"
                         layout="fill"
                         objectFit="cover"
-                        style={{ opacity: 1 }} // Adjust opacity for the background
                     />
                 )}
                 {overlayImage && (
@@ -127,7 +135,6 @@ export default function Home() {
                                 cursor: 'move',
                                 width: `${overlayDimensions.width}px`,
                                 height: `${overlayDimensions.height}px`,
-                                border: isResizing ? '2px dashed rgba(0, 0, 255, 0.5)' : 'none', // Show border only when resizing
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
@@ -138,7 +145,6 @@ export default function Home() {
                                 alt="Overlay"
                                 layout="fill"
                                 objectFit="contain"
-                                style={{ pointerEvents: 'none' }} // Prevent pointer events on image to allow resizing
                             />
                             <div
                                 onMouseDown={handleResizeMouseDownOverlay}
@@ -163,7 +169,7 @@ export default function Home() {
                             bottom: '20px',
                             left: '50%',
                             transform: 'translateX(-50%)',
-                            color: 'white',
+                            color: textColor, // Set the color from the state
                             fontSize: `${textSize}px`,
                             textAlign: 'center',
                             textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)',
