@@ -145,7 +145,7 @@ export default function Home() {
                         alt="Background"
                         layout="fill"
                         objectFit="cover"
-                        style={{ opacity: 0.8 }} // Adjust opacity for the background
+                        style={{ opacity: 1 }} // Adjust opacity for the background
                     />
                 )}
                 {overlayImage && (
