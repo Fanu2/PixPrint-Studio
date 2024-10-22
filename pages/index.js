@@ -11,7 +11,8 @@ export default function Home() {
     const [overlayDimensions, setOverlayDimensions] = useState({ width: 100, height: 100 }); // Default dimensions for overlay
     const [textSize, setTextSize] = useState(36); // Default text size
     const [fontColor, setFontColor] = useState('#ffffff'); // Default font color
-    const [isResizing, setIsResizing] = useState(false); // State for resizing
+    const [isResizingOverlay, setIsResizingOverlay] = useState(false); // State for overlay resizing
+    const [isResizingText, setIsResizingText] = useState(false); // State for text resizing
     const overlayRef = useRef(null);
     const textRef = useRef(null);
 
@@ -39,7 +40,7 @@ export default function Home() {
 
     const handleResizeMouseDownOverlay = (e) => {
         e.preventDefault();
-        setIsResizing(true); // Start resizing
+        setIsResizingOverlay(true); // Start overlay resizing
         const initialWidth = overlayRef.current.offsetWidth;
         const initialHeight = overlayRef.current.offsetHeight;
         const initialX = e.clientX;
@@ -52,7 +53,28 @@ export default function Home() {
         };
 
         const onMouseUp = () => {
-            setIsResizing(false); // Stop resizing
+            setIsResizingOverlay(false); // Stop overlay resizing
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        };
+
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+    };
+
+    const handleResizeMouseDownText = (e) => {
+        e.preventDefault();
+        setIsResizingText(true); // Start text resizing
+        const initialTextSize = textSize; // Store initial text size
+        const initialY = e.clientY; // Store initial mouse Y position
+
+        const onMouseMove = (moveEvent) => {
+            const newSize = Math.max(10, initialTextSize + (moveEvent.clientY - initialY)); // Resize text
+            setTextSize(newSize);
+        };
+
+        const onMouseUp = () => {
+            setIsResizingText(false); // Stop text resizing
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', onMouseUp);
         };
@@ -132,10 +154,10 @@ export default function Home() {
                             ref={overlayRef}
                             style={{
                                 position: 'absolute',
-                                cursor: isResizing ? 'nwse-resize' : 'move', // Change cursor based on resizing state
+                                cursor: isResizingOverlay ? 'nwse-resize' : 'move', // Change cursor based on resizing state
                                 width: `${overlayDimensions.width}px`,
                                 height: `${overlayDimensions.height}px`,
-                                border: isResizing ? '2px dashed rgba(0, 0, 255, 0.5)' : 'none',
+                                border: isResizingOverlay ? '2px dashed rgba(0, 0, 255, 0.5)' : 'none',
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
@@ -175,11 +197,12 @@ export default function Home() {
                             fontSize: `${textSize}px`,
                             textAlign: 'center',
                             textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)',
-                            cursor: 'move',
+                            cursor: isResizingText ? 'nwse-resize' : 'move', // Change cursor based on resizing state
                         }}
                     >
                         {text}
                         <div
+                            onMouseDown={handleResizeMouseDownText}
                             style={{
                                 position: 'absolute',
                                 right: 0,
@@ -188,19 +211,6 @@ export default function Home() {
                                 height: '10px',
                                 backgroundColor: 'blue',
                                 cursor: 'nwse-resize',
-                            }}
-                            onMouseDown={(e) => {
-                                e.preventDefault();
-                                const onMouseMove = (moveEvent) => {
-                                    const newSize = Math.max(10, textSize + (moveEvent.clientY - e.clientY));
-                                    setTextSize(newSize);
-                                };
-                                const onMouseUp = () => {
-                                    document.removeEventListener('mousemove', onMouseMove);
-                                    document.removeEventListener('mouseup', onMouseUp);
-                                };
-                                document.addEventListener('mousemove', onMouseMove);
-                                document.addEventListener('mouseup', onMouseUp);
                             }}
                         />
                     </div>
