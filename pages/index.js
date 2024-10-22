@@ -10,7 +10,8 @@ export default function Home() {
     const [overlayImage, setOverlayImage] = useState(null); // Overlay image
     const [overlayDimensions, setOverlayDimensions] = useState({ width: 100, height: 100 }); // Default dimensions for overlay
     const [textSize, setTextSize] = useState(36); // Default text size
-    const [fontColor, setFontColor] = useState('#FFFFFF'); // Default font color (white)
+    const [fontColor, setFontColor] = useState('#ffffff'); // Default font color
+    const [isResizing, setIsResizing] = useState(false); // State for resizing
     const overlayRef = useRef(null);
     const textRef = useRef(null);
 
@@ -38,6 +39,7 @@ export default function Home() {
 
     const handleResizeMouseDownOverlay = (e) => {
         e.preventDefault();
+        setIsResizing(true); // Start resizing
         const initialWidth = overlayRef.current.offsetWidth;
         const initialHeight = overlayRef.current.offsetHeight;
         const initialX = e.clientX;
@@ -50,6 +52,7 @@ export default function Home() {
         };
 
         const onMouseUp = () => {
+            setIsResizing(false); // Stop resizing
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', onMouseUp);
         };
@@ -107,8 +110,8 @@ export default function Home() {
                     Font Color:
                     <input
                         type="color"
-                        value={fontColor}
-                        onChange={(e) => setFontColor(e.target.value)}
+                        onChange={(e) => setFontColor(e.target.value)} // Use the color selected by the user
+                        value={fontColor} // Bind to the font color state
                     />
                 </label>
             </div>
@@ -120,7 +123,7 @@ export default function Home() {
                         alt="Background"
                         layout="fill"
                         objectFit="cover"
-                        style={{ opacity: 0.5 }} // Set opacity for the background
+                        style={{ opacity: 0.5 }} // Adjust opacity for the background
                     />
                 )}
                 {overlayImage && (
@@ -129,9 +132,10 @@ export default function Home() {
                             ref={overlayRef}
                             style={{
                                 position: 'absolute',
-                                cursor: 'move',
+                                cursor: isResizing ? 'nwse-resize' : 'move', // Change cursor based on resizing state
                                 width: `${overlayDimensions.width}px`,
                                 height: `${overlayDimensions.height}px`,
+                                border: isResizing ? '2px dashed rgba(0, 0, 255, 0.5)' : 'none',
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
@@ -167,7 +171,7 @@ export default function Home() {
                             bottom: '20px',
                             left: '50%',
                             transform: 'translateX(-50%)',
-                            color: fontColor, // Apply the selected font color
+                            color: fontColor, // Use the selected font color
                             fontSize: `${textSize}px`,
                             textAlign: 'center',
                             textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)',
