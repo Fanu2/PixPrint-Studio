@@ -177,16 +177,19 @@ export default function Home() {
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                transform: `rotate(${rotationAngle}deg)`, // Apply rotation
+                                transform: `rotate(${rotationAngle}deg)`, // Apply rotation here
                             }}
                         >
-                            <Image
-                                src={overlayImage}
-                                alt="Overlay"
-                                layout="fill"
-                                objectFit="contain"
-                                style={{ pointerEvents: 'none' }} // Prevent pointer events on image to allow resizing
-                            />
+                            {/* Wrapping the Image component in a div */}
+                            <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+                                <Image
+                                    src={overlayImage}
+                                    alt="Overlay"
+                                    layout="fill"
+                                    objectFit="contain"
+                                    style={{ pointerEvents: 'none' }} // Prevent pointer events on image to allow resizing
+                                />
+                            </div>
                             <div
                                 onMouseDown={handleResizeMouseDownOverlay}
                                 style={{
