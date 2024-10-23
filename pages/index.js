@@ -180,16 +180,17 @@ export default function Home() {
                                 transform: `rotate(${rotationAngle}deg)`, // Apply rotation here
                             }}
                         >
-                            {/* Wrapping the Image component in a div */}
-                            <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-                                <Image
-                                    src={overlayImage}
-                                    alt="Overlay"
-                                    layout="fill"
-                                    objectFit="contain"
-                                    style={{ pointerEvents: 'none' }} // Prevent pointer events on image to allow resizing
-                                />
-                            </div>
+                            {/* Using regular img tag for the overlay image */}
+                            <img
+                                src={overlayImage}
+                                alt="Overlay"
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'contain',
+                                    pointerEvents: 'none', // Prevent pointer events on image to allow resizing
+                                }}
+                            />
                             <div
                                 onMouseDown={handleResizeMouseDownOverlay}
                                 style={{
