@@ -9,6 +9,7 @@ export default function Home() {
     const [bgImage, setBgImage] = useState(null); // Background image
     const [overlayImage, setOverlayImage] = useState(null); // Overlay image
     const [overlayDimensions, setOverlayDimensions] = useState({ width: 100, height: 100 }); // Default dimensions for overlay
+    const [rotationAngle, setRotationAngle] = useState(0); // Rotation angle for overlay
     const [textSize, setTextSize] = useState(36); // Default text size
     const [fontColor, setFontColor] = useState('#ffffff'); // Default font color
     const [isResizingOverlay, setIsResizingOverlay] = useState(false); // State for overlay resizing
@@ -83,6 +84,10 @@ export default function Home() {
         document.addEventListener('mouseup', onMouseUp);
     };
 
+    const handleRotationChange = (e) => {
+        setRotationAngle(Number(e.target.value)); // Update rotation angle
+    };
+
     const generatePDF = () => {
         const input = document.getElementById('pdf-content');
         html2canvas(input)
@@ -136,6 +141,17 @@ export default function Home() {
                         value={fontColor} // Bind to the font color state
                     />
                 </label>
+                <label>
+                    Rotate Overlay:
+                    <input
+                        type="range"
+                        min="0"
+                        max="360"
+                        value={rotationAngle}
+                        onChange={handleRotationChange}
+                    />
+                    {rotationAngle}°
+                </label>
             </div>
 
             <div id="pdf-content" style={{ position: 'relative', width: '595px', height: '842px', marginTop: '20px', border: '1px solid #ccc' }}>
@@ -161,6 +177,7 @@ export default function Home() {
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
+                                transform: `rotate(${rotationAngle}deg)`, // Apply rotation
                             }}
                         >
                             <Image
