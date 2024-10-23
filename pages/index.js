@@ -178,9 +178,9 @@ export default function Home() {
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 transform: `rotate(${rotationAngle}deg)`, // Apply rotation here
+                                transformOrigin: 'center center', // Set origin for rotation
                             }}
                         >
-                            {/* Using regular img tag for the overlay image */}
                             <img
                                 src={overlayImage}
                                 alt="Overlay"
